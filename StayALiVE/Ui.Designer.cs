@@ -28,20 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.metroToggle1 = new MetroFramework.Controls.MetroToggle();
+            this.StartSwitch = new MetroFramework.Controls.MetroToggle();
             this.pidValueBox = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // metroToggle1
             // 
-            this.metroToggle1.AutoSize = true;
-            this.metroToggle1.Location = new System.Drawing.Point(6, 12);
-            this.metroToggle1.Name = "metroToggle1";
-            this.metroToggle1.Size = new System.Drawing.Size(80, 17);
-            this.metroToggle1.TabIndex = 0;
-            this.metroToggle1.Text = "Off";
-            this.metroToggle1.UseVisualStyleBackColor = true;
-            this.metroToggle1.CheckedChanged += new System.EventHandler(this.metroToggle1_CheckedChanged);
+            this.StartSwitch.AutoSize = true;
+            this.StartSwitch.Location = new System.Drawing.Point(6, 12);
+            this.StartSwitch.Name = "metroToggle1";
+            this.StartSwitch.Size = new System.Drawing.Size(80, 17);
+            this.StartSwitch.TabIndex = 0;
+            this.StartSwitch.Text = "Off";
+            this.StartSwitch.UseVisualStyleBackColor = true;
+            this.StartSwitch.CheckedChanged += new System.EventHandler(Program.SwitchOnlineState);
             // 
             // pidValueBox
             // 
@@ -59,7 +59,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(93, 61);
             this.Controls.Add(this.pidValueBox);
-            this.Controls.Add(this.metroToggle1);
+            this.Controls.Add(this.StartSwitch);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Ui";
             this.ShowIcon = false;
@@ -71,7 +71,7 @@
 
         #endregion
 
-        internal MetroFramework.Controls.MetroToggle metroToggle1;
+        internal MetroFramework.Controls.MetroToggle StartSwitch;
         internal System.Windows.Forms.Label pidValueBox;
     }
 }
