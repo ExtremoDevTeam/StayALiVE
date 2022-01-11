@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 namespace StayALiVE
 {
+
     internal class Config
     {
         public List<string> LoadedServerMods { get; set; } = new List<string>() { };
@@ -21,6 +22,7 @@ namespace StayALiVE
             public string CfgsPath { get; set; } = Defaultpath;
             public string CfgPerformance { get; set; } = "A3_Performance.cfg";
             public string CfgDedicatedServer { get; set; } = "A3_DedicatedServer.cfg";
+            public string CustomServerDirectory { get; set; } = string.Empty;
             public List<string> ServerMods { get; set; } = new List<string>()
             {
                 "@server"
@@ -28,7 +30,8 @@ namespace StayALiVE
             public bool EnableHyperThreading { get; set; } = false;
             public bool EnableLargePage { get; set; } = false;
             public bool EnableExperimentalAlg { get; set; } = true;
-            public bool EnableAutoInit { get; set; } = true;
+            public bool EnableAutoInit { get; set; } = true; 
+            public bool Enable64Bit { get; set; } = true;
         }
 
         private bool ExistsConfig() => File.Exists(ConfigPath);
@@ -37,7 +40,7 @@ namespace StayALiVE
         
         private void NewConfig() => File.WriteAllText(ConfigPath, JsonConvert.SerializeObject(new Holder() { }, Formatting.Indented));
 
-        private Holder GetConfig() => JsonConvert.DeserializeObject<Holder>(File.ReadAllText(ConfigPath));
+        internal Holder GetConfig() => JsonConvert.DeserializeObject<Holder>(File.ReadAllText(ConfigPath));
 
         internal Config(string path)
         {
@@ -50,10 +53,8 @@ namespace StayALiVE
             }
         }
 
-        internal string GetConfigAsString()
+        internal string GetConfigAsString(Holder config)
         {
-            Holder config = GetConfig();
-
             if(config == null)
                 Environment.Exit(0);
 

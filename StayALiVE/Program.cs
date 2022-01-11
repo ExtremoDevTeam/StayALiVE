@@ -48,6 +48,7 @@ namespace StayALiVE
     { 
         internal static Program GetInstance() { return new Program(); }
         internal static ProgramAssembly programAssembly = null;
+        internal static Config.Holder Settings = null;
         private static int procID = -1;
         private static bool killswitch = false;
         private static string CMDLine = "";
@@ -59,12 +60,13 @@ namespace StayALiVE
 
             string path = Path.Combine(Path.GetDirectoryName(programAssembly._assembly.Location), "StayALiVE.json");
             var config = new Config(path);
+            Settings = config.GetConfig();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+             
+            CMDLine = config.GetConfigAsString(Settings);
             
-            CMDLine = config.GetConfigAsString();
-
             programAssembly.ui = Ui.GetInstance();
             Application.Run(programAssembly.ui);
 
@@ -85,8 +87,10 @@ namespace StayALiVE
         private static void Run()
         {
             if (killswitch || IsRunning()) return;
+            
             void Die(object sender, EventArgs e) => Run();
-            var serverProcess = new Process { StartInfo = new ProcessStartInfo { FileName = "arma3server_x64.exe", Arguments = CMDLine }, EnableRaisingEvents = true };
+            var procname = Settings.Enable64Bit ? "arma3server_x64.exe" : "arma3server.exe";
+            var serverProcess = new Process { StartInfo = new ProcessStartInfo { FileName = Settings.CustomServerDirectory.Equals(string.Empty) ? procname : Path.Combine(Settings.CustomServerDirectory, procname), Arguments = CMDLine }, EnableRaisingEvents = true };
             serverProcess.Exited += Die;
             serverProcess.Start();
             procID = serverProcess.Id;
