@@ -57,37 +57,18 @@ namespace StayALiVE
         {
             programAssembly = ProgramAssembly.GetInstance();
 
-            void MakeDefaultCMDLine(string path)
-            {
-                if (!File.Exists(path))
-                {
-                    string defaultCMDline = "" +
-                        "-port=2302 " +
-                        "-profiles=c:\\Arma3Server\\@server\\server_configs\\serverData " +
-                        "-name=Admin " +
-                        "-cfg=c:\\Arma3Server\\@server\\server_configs\\A3_Performance.cfg " +
-                        "-config=c:\\Arma3Server\\@server\\server_configs\\A3_DedicatedServer.cfg " +
-                        "-servermod=@server " +
-                        "-enableHT " +
-                        "-hugepages " +
-                        "-bandwidthAlg=2 " +
-                        "-autoinit";
-                    File.WriteAllText(path, defaultCMDline, Encoding.UTF8);
-                    Environment.Exit(2);
-                }
-            }
-            void LoadCMDLine()
-            {
-                string path = Path.Combine(Path.GetDirectoryName(programAssembly._assembly.Location), "StayALiVE.cmdline");
-                MakeDefaultCMDLine(path);
-                CMDLine = File.ReadAllText(path);
-            }
-            
+            string path = Path.Combine(Path.GetDirectoryName(programAssembly._assembly.Location), "StayALiVE.json");
+            var config = new Config(path);
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            LoadCMDLine();
+            
+            CMDLine = config.GetConfigAsString();
+
             programAssembly.ui = Ui.GetInstance();
             Application.Run(programAssembly.ui);
+
+            //File.WriteAllText(Path.Combine(Path.GetDirectoryName(programAssembly._assembly.Location), "StayALiVE-test.txt"), CMDLine);
         }
         internal static void SwitchOnlineState(object sender, EventArgs e)
         {
