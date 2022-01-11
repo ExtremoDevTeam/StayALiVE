@@ -2,16 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
+
+//-- https://github.com/Ni1kko/StayALiVE
 
 namespace StayALiVE
 {
-
     internal class Config
     {
+        internal static Config GetInstance(string path) { return new Config(path); }
+        internal static Holder Settings = null;
         public List<string> LoadedServerMods { get; set; } = new List<string>() { };
         private static readonly string Defaultpath = "c:\\Arma3Server\\@server\\server_configs";
-        private static string ConfigPath { get; set; }
+        private static string ConfigFile { get; set; }
 
         internal class Holder
         {
@@ -34,17 +36,17 @@ namespace StayALiVE
             public bool Enable64Bit { get; set; } = true;
         }
 
-        private bool ExistsConfig() => File.Exists(ConfigPath);
+        private bool ExistsConfig() => File.Exists(ConfigFile);
 
-        private void DelConfig() => File.Delete(ConfigPath);
+        private void DelConfig() => File.Delete(ConfigFile);
         
-        private void NewConfig() => File.WriteAllText(ConfigPath, JsonConvert.SerializeObject(new Holder() { }, Formatting.Indented));
+        private void NewConfig() => File.WriteAllText(ConfigFile, JsonConvert.SerializeObject(new Holder() { }, Formatting.Indented));
 
-        internal Holder GetConfig() => JsonConvert.DeserializeObject<Holder>(File.ReadAllText(ConfigPath));
+        internal Holder GetConfig() => JsonConvert.DeserializeObject<Holder>(File.ReadAllText(ConfigFile));
 
         internal Config(string path)
         {
-            ConfigPath = path;
+            ConfigFile = Path.Combine(path, "StayALiVE.json");
 
             if (!ExistsConfig())
             {

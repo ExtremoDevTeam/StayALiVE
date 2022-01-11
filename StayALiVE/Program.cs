@@ -1,54 +1,18 @@
 ﻿using System;
-using System.Reflection;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
+
+//-- https://github.com/Ni1kko/StayALiVE
 
 namespace StayALiVE
 {
-    internal class ProgramAssembly
-    {
-        internal static ProgramAssembly GetInstance() { return new ProgramAssembly(); }
-        internal Assembly _assembly = typeof(Program).Assembly;
-        internal Program program = null;
-        internal Ui ui = null;
-
-        internal ProgramAssembly()
-        {
-            AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolver;
-            program = Program.GetInstance();
-        }
-        private Assembly AssemblyResolver(object sender, ResolveEventArgs args)
-        {
-            var askedAssembly = new AssemblyName(args.Name);
-            lock (this)
-            {
-                var stream = _assembly.GetManifestResourceStream($"{Assembly.GetExecutingAssembly().GetName().Name}.Embedded.Assemblies.{askedAssembly.Name}.dll");
-                if (stream == null) return null;
-
-                Assembly assembly = null;
-                try
-                {
-                    var assemblyData = new byte[stream.Length];
-                    stream.Read(assemblyData, 0, assemblyData.Length);
-                    assembly = Assembly.Load(assemblyData);
-                }
-                catch (Exception e)
-                {
-                    throw new Exception($"Loading embedded assembly: {askedAssembly.Name}{Environment.NewLine}Has thrown a unhandled exception: {e}");
-                }
-                return assembly;
-            }
-        }
-    }
-
     internal class Program
     { 
-        internal static Program GetInstance() { return new Program(); }
+        internal static Program GetInstance() { return new Program(); } 
         internal static ProgramAssembly programAssembly = null;
-        internal static Config.Holder Settings = null;
+        internal static Config config = null;
         private static int procID = -1;
         private static bool killswitch = false;
         private static string CMDLine = "";
@@ -57,20 +21,17 @@ namespace StayALiVE
         internal static void Main()
         {
             programAssembly = ProgramAssembly.GetInstance();
-
-            string path = Path.Combine(Path.GetDirectoryName(programAssembly._assembly.Location), "StayALiVE.json");
-            var config = new Config(path);
-            Settings = config.GetConfig();
+            
+            var config = Config.GetInstance(Path.GetDirectoryName(programAssembly._assembly.Location));
+            Config.Settings = config.GetConfig();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
              
-            CMDLine = config.GetConfigAsString(Settings);
+            CMDLine = config.GetConfigAsString(Config.Settings);
             
             programAssembly.ui = Ui.GetInstance();
             Application.Run(programAssembly.ui);
-
-            //File.WriteAllText(Path.Combine(Path.GetDirectoryName(programAssembly._assembly.Location), "StayALiVE-test.txt"), CMDLine);
         }
         internal static void SwitchOnlineState(object sender, EventArgs e)
         {
@@ -89,8 +50,8 @@ namespace StayALiVE
             if (killswitch || IsRunning()) return;
             
             void Die(object sender, EventArgs e) => Run();
-            var procname = Settings.Enable64Bit ? "arma3server_x64.exe" : "arma3server.exe";
-            var serverProcess = new Process { StartInfo = new ProcessStartInfo { FileName = Settings.CustomServerDirectory.Equals(string.Empty) ? procname : Path.Combine(Settings.CustomServerDirectory, procname), Arguments = CMDLine }, EnableRaisingEvents = true };
+            var procname = Config.Settings.Enable64Bit ? "arma3server_x64.exe" : "arma3server.exe";
+            var serverProcess = new Process { StartInfo = new ProcessStartInfo { FileName = Config.Settings.CustomServerDirectory.Equals(string.Empty) ? procname : Path.Combine(Config.Settings.CustomServerDirectory, procname), Arguments = CMDLine }, EnableRaisingEvents = true };
             serverProcess.Exited += Die;
             serverProcess.Start();
             procID = serverProcess.Id;
