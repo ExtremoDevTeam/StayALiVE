@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29409.12
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StayALiVE", "StayALiVE\StayALiVE.csproj", "{AACEF69D-89F5-4721-B636-2BB56731504A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StayALiVE Updater", "StayALiVE Updater\StayALiVE Updater.csproj", "{1588EFD4-2621-4AD9-AA5B-029439D94CA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StayALiVE Lib", "StayALiVE Lib\StayALiVE Lib.csproj", "{70DAFB65-F59A-4E84-9618-15E85BEE32E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{AACEF69D-89F5-4721-B636-2BB56731504A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AACEF69D-89F5-4721-B636-2BB56731504A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AACEF69D-89F5-4721-B636-2BB56731504A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1588EFD4-2621-4AD9-AA5B-029439D94CA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1588EFD4-2621-4AD9-AA5B-029439D94CA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1588EFD4-2621-4AD9-AA5B-029439D94CA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1588EFD4-2621-4AD9-AA5B-029439D94CA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70DAFB65-F59A-4E84-9618-15E85BEE32E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70DAFB65-F59A-4E84-9618-15E85BEE32E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70DAFB65-F59A-4E84-9618-15E85BEE32E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70DAFB65-F59A-4E84-9618-15E85BEE32E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
