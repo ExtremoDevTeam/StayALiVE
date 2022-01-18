@@ -10,40 +10,44 @@ namespace StayALiVE
 {
     internal class Program
     { 
-        internal static Program GetInstance() { return new Program(); } 
-        internal static ProgramAssembly programAssembly = null;
-        internal static Config config = null;
+        internal static Program GetInstance() { return new Program(); }
+        internal static Ui ui = null;
         private static int procID = -1;
         private static bool killswitch = false;
         private static string CMDLine = "";
 
-        [STAThread]
-        internal static void Main()
+        private static async Task Setup()
         {
-            programAssembly = ProgramAssembly.GetInstance();
-            
-            var config = Config.GetInstance(Path.GetDirectoryName(programAssembly._assembly.Location));
-            Config.Settings = config.GetConfig();
+            var programAssembly = ProgramAssembly.GetInstance();
+            var config = Config.GetInstance(programAssembly.Path());
 
+            await Task.Delay(1000);
+
+            Config.Settings = config.GetConfig();
+            CMDLine = config.GetConfigAsString(Config.Settings);
+            ui = Ui.GetInstance();
+        }
+
+        [STAThread]
+        internal static async Task Main()
+        {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-             
-            CMDLine = config.GetConfigAsString(Config.Settings);
-            
-            programAssembly.ui = Ui.GetInstance();
-            Application.Run(programAssembly.ui);
+            await Setup();
+            Application.Run(ui);
         }
+
         internal static void SwitchOnlineState(object sender, EventArgs e)
         {
-            if (programAssembly.ui.StartSwitch.Checked) {
+            if (ui.StartSwitch.Checked) {
                 killswitch = false;
                 Run();
             } else {
                 killswitch = true;
                 Die();
             }
-            programAssembly.ui.pidValueBox.Text = procID.ToString();
-            programAssembly.ui.Text = killswitch ? "Offline" : "Online";
+            ui.pidValueBox.Text = procID.ToString();
+            ui.Text = killswitch ? "Offline" : "Online";
         }
         private static void Run()
         {
@@ -55,8 +59,8 @@ namespace StayALiVE
             serverProcess.Exited += Die;
             serverProcess.Start();
             procID = serverProcess.Id;
-            programAssembly.ui.pidValueBox.Text = procID.ToString();
-            programAssembly.ui.Text = procID == -1 ? "Offline" : "Online";
+            ui.pidValueBox.Text = procID.ToString();
+            ui.Text = procID == -1 ? "Offline" : "Online";
         }
         private static void Die()
         {

@@ -99,5 +99,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Embedded\Assemblies\MetroFramework.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StayALiVE Lib\StayALiVE Lib.csproj">
+      <Project>{70dafb65-f59a-4e84-9618-15e85bee32e8}</Project>
+      <Name>StayALiVE Lib</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Embedded\Assemblies\StayALiVE Lib.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

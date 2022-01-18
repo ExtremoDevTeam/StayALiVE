@@ -9,14 +9,14 @@ namespace StayALiVE
     {
         internal static ProgramAssembly GetInstance() { return new ProgramAssembly(); }
         internal Assembly _assembly = typeof(Program).Assembly;
-        internal Program program = null;
-        internal Ui ui = null;
 
         internal ProgramAssembly()
         {
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolver;
-            program = Program.GetInstance();
         }
+
+        internal string Path() => System.IO.Path.GetDirectoryName(_assembly.Location);
+
         private Assembly AssemblyResolver(object sender, ResolveEventArgs args)
         {
             var askedAssembly = new AssemblyName(args.Name);
